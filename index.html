@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Standup Roulette - Vegas Style Daily Standup Wheel</title>
+  <meta name="description" content="A visually spectacular Vegas-style roulette wheel to choose team members for daily standups.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎰</text></svg>">
+</head>
+<body>
+  <!-- Fullscreen Celebration Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Application Header -->
+  <header class="app-header">
+    <div class="logo-group">
+      <span class="logo-chip">🎰</span>
+      <h1 class="app-title">Standup Roulette</h1>
+    </div>
+
+    <div class="header-controls">
+      <!-- Theme Switcher -->
+      <select id="theme-selector" class="theme-select" title="Select Roulette Theme" aria-label="Roulette Theme">
+        <!-- Injected via ThemesEngine -->
+      </select>
+
+      <!-- Audio Mute Toggle -->
+      <button id="btn-sound-toggle" class="control-btn" title="Toggle Casino Sounds" aria-label="Toggle Sound">
+        <span id="sound-icon">🔊</span>
+        <span id="sound-text">Sound ON</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="main-container">
+    <!-- Center Stage: Roulette Wheel -->
+    <section class="wheel-stage" aria-label="Roulette Stage">
+      <div class="canvas-wrapper">
+        <canvas id="roulette-canvas" width="640" height="640"></canvas>
+      </div>
+
+      <div class="spin-action-box">
+        <button id="btn-spin" class="spin-btn">SPIN WHEEL</button>
+        <div class="shortcut-hint">or press <span class="shortcut-key">SPACE</span></div>
+        <div id="status-message" class="status-message" aria-live="polite">Ready to roll</div>
+      </div>
+    </section>
+
+    <!-- Right Sidebar: Team Roster & Settings -->
+    <aside class="roster-sidebar" aria-label="Team Management">
+      <div class="roster-header">
+        <h2 class="roster-title">
+          <span>👥 Team Roster</span>
+          <span id="roster-count" class="roster-badge">0 Active</span>
+        </h2>
+      </div>
+
+      <!-- Quick Add Member Form -->
+      <form id="form-add-member" class="roster-add-box">
+        <input 
+          type="text" 
+          id="input-new-name" 
+          class="roster-input" 
+          placeholder="Add team member..." 
+          autocomplete="off"
+          maxlength="24"
+        />
+        <button type="submit" class="btn-add">Add</button>
+      </form>
+
+      <!-- List of Members -->
+      <div id="roster-list" class="roster-list" role="list">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Action Footer -->
+      <div class="roster-footer">
+        <button id="btn-reset-standup" class="btn-secondary btn-reset-session" title="Restore all active members for a new standup round">
+          🔄 Reset Today's Standup
+        </button>
+        <div class="footer-btn-row">
+          <button id="btn-bulk-modal" class="btn-secondary">📋 Bulk Edit</button>
+          <button id="btn-reset-defaults" class="btn-secondary">↺ Defaults</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Winner Announcement Modal -->
+  <div id="winner-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card">
+      <div class="winner-badge">🏆</div>
+      <div class="winner-title">The Wheel Has Decided!</div>
+      <div id="winner-name-display" class="winner-name">Alice</div>
+      <div class="modal-actions">
+        <button id="btn-winner-mark-spoken" class="btn-secondary btn-reset-session">
+          ✓ Mark as Spoken & Close
+        </button>
+        <button id="btn-winner-spin-again" class="spin-btn" style="font-size: 1.05rem; padding: 12px 28px;">
+          Spin Again
+        </button>
+        <button id="btn-winner-dismiss" class="btn-secondary">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bulk Edit Modal -->
+  <div id="bulk-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card" style="max-width: 520px; text-align: left;">
+      <h3 style="color: var(--accent-glow); font-size: 1.25rem;">Bulk Edit Team Roster</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">
+        Enter team member names, one name per line. Existing members keep their status.
+      </p>
+      <textarea id="bulk-names-input" class="bulk-textarea" placeholder="Alice&#10;Bob&#10;Charlie..."></textarea>
+      <div class="footer-btn-row" style="margin-top: 8px;">
+        <button id="btn-bulk-save" class="btn-add" style="flex: 1; padding: 10px;">Save Roster</button>
+        <button id="btn-bulk-cancel" class="btn-secondary" style="flex: 1;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts in dependency order -->
+  <script src="js/themes.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/roulette.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
