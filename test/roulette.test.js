@@ -128,3 +128,32 @@ test('StorageManager - participant management and standup flow', async (t) => {
     assert.equal(list[0].name, 'Alice');
   });
 });
+
+test('RouletteWheel - ball lands in the winning slice', () => {
+  const noop = () => {};
+  const ctx = new Proxy({}, {
+    get: (_, prop) => (prop.startsWith('create') ? () => ({ addColorStop: noop }) : noop),
+    set: () => true
+  });
+  global.window = { addEventListener: noop, removeEventListener: noop, devicePixelRatio: 1 };
+  global.requestAnimationFrame = noop;
+  const RouletteWheel = require('../js/roulette.js');
+  const canvas = { getContext: () => ctx, getBoundingClientRect: () => ({ width: 600, height: 600 }) };
+
+  const slices = Array.from({ length: 7 }, (_, i) => ({ id: i, name: `P${i}` }));
+  const sliceAngle = (Math.PI * 2) / slices.length;
+
+  for (let trial = 0; trial < 200; trial++) {
+    const wheel = new RouletteWheel(canvas);
+    wheel.setSlices(slices);
+    wheel.wheelAngle = Math.random() * 100;
+    const winningIndex = trial % slices.length;
+    let announced = null;
+    wheel.spin(winningIndex, w => { announced = w; });
+    wheel.animate(wheel.spinStartTime + wheel.spinDuration);
+
+    const rel = (((wheel.ballAngle - wheel.wheelAngle) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    assert.equal(Math.floor(rel / sliceAngle), winningIndex);
+    assert.equal(announced, slices[winningIndex]);
+  }
+});

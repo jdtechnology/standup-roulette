@@ -41,7 +41,7 @@ body {
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 1200; /* above .modal-backdrop (1100) so it shows over the winner modal */
 }
 
 /* Header */
@@ -431,6 +431,13 @@ body {
 .btn-reset-session:hover {
   background: rgba(16, 185, 129, 0.25);
   border-color: #34d399;
+}
+
+.roster-sidebar.locked .roster-add-box,
+.roster-sidebar.locked .roster-list,
+.roster-sidebar.locked .roster-footer {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 /* Modals */

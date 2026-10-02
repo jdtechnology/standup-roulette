@@ -32,6 +32,7 @@
   const btnResetStandup = document.getElementById('btn-reset-standup');
   const btnResetDefaults = document.getElementById('btn-reset-defaults');
   const btnBulkModal = document.getElementById('btn-bulk-modal');
+  const rosterSidebarEl = document.querySelector('.roster-sidebar');
 
   // Winner Modal Elements
   const winnerModal = document.getElementById('winner-modal');
@@ -253,6 +254,7 @@
 
     btnSpin.disabled = true;
     statusMsg.textContent = 'Spinning... Who will take the floor?';
+    setRosterLocked(true);
 
     // Fair random pick
     const winningIndex = Math.floor(Math.random() * eligible.length);
@@ -268,6 +270,7 @@
    * Handler when ball lands and wheel stops
    */
   function onSpinFinished(winner) {
+    setRosterLocked(false);
     if (!winner) return;
 
     soundEngine.playWinFanfare();
@@ -278,6 +281,16 @@
 
     // Show winner modal
     openModal(winnerModal);
+  }
+
+  /**
+   * Disables roster controls while the wheel spins so the slices can't change mid-spin
+   */
+  function setRosterLocked(locked) {
+    rosterSidebarEl.classList.toggle('locked', locked);
+    rosterSidebarEl.querySelectorAll('button, input').forEach(el => {
+      el.disabled = locked;
+    });
   }
 
   function openModal(modalEl) {
