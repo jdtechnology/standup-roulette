@@ -109,8 +109,9 @@ class RouletteWheel {
     // Wheel spins clockwise: 4 to 6 full rotations
     const wheelRotations = 4 + Math.random() * 2;
     const startWheelAngle = this.wheelAngle % (Math.PI * 2);
-    // Ball spins counter-clockwise (opposite to wheel): 8 to 11 rotations
-    const ballRotations = 8 + Math.random() * 2;
+    // Ball spins counter-clockwise (opposite to wheel): 8 to 10 whole rotations.
+    // Must be an integer so the ball still lands on the winning slice center.
+    const ballRotations = 8 + Math.floor(Math.random() * 3);
 
     // We choose final wheel angle arbitrarily, then solve for ball landing in winning slice
     const finalWheelAngle = startWheelAngle + wheelRotations * Math.PI * 2 + Math.random() * Math.PI;
